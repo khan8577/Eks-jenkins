@@ -10,9 +10,6 @@ jobs:
     name: Terraform EKS Apply
     runs-on: ubuntu-latest
 
-    env:
-      AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-
     steps:
       # 1️⃣ Checkout repo
       - name: Checkout repo
@@ -35,11 +32,14 @@ jobs:
       # 4️⃣ Terraform Init
       - name: Terraform Init
         run: terraform init -input=false
+        working-directory: terraform
 
       # 5️⃣ Terraform Plan
       - name: Terraform Plan
         run: terraform plan -out=tfplan -input=false
+        working-directory: terraform
 
       # 6️⃣ Terraform Apply
       - name: Terraform Apply
         run: terraform apply -input=false -auto-approve tfplan
+        working-directory: terraform
