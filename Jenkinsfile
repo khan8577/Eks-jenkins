@@ -15,19 +15,25 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh 'terraform init -input=false'
+                dir('terraform') {
+                    sh 'terraform init -input=false'
+                }
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                sh 'terraform plan -out=tfplan -input=false'
+                dir('terraform') {
+                    sh 'terraform plan -out=tfplan -input=false'
+                }
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                sh 'terraform apply -input=false -auto-approve tfplan'
+                dir('terraform') {
+                    sh 'terraform apply -input=false -auto-approve tfplan'
+                }
             }
         }
     }
