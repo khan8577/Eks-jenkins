@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
     }
 
     stages {
@@ -32,16 +32,24 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 dir('terraform') {
-                    sh 'terraform apply -input=false -auto-approve tfplan'
+                    sh 'terraform apply -auto-approve tfplan'
+                }
+            }
+        }
+
+        stage('Terraform Destroy') {
+            when {
+                expression { return params.DESTROY == true }
+            }
+            steps {
+                dir('terraform') {
+                    sh 'terraform destroy -auto-approve'
                 }
             }
         }
     }
-    stage('terraform destroy') {
-        steps {
-            dir('terraform') {
-                sh 'terraform destroy -auto-approve'
-            }
-        }
-        
+
+    parameters {
+        booleanParam(name: 'DESTROY', defaultValue: false, description: 'Check to destroy infrastructure')
+    }
 }
