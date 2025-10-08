@@ -12,4 +12,5 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/khan8577/Eks-jenkins.git'
             }
         }
+    }
 }
