@@ -2,3 +2,5 @@
 DS_Store
 .terraform.lock.hcl
 *.tfstate
+tfplan_destroy
+*.tfstate.backup
